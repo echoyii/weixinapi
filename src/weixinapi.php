@@ -16,13 +16,18 @@ class WeixinApi
         'appid' => 'wxc2c6b51a8030a6ab',
         'token' => '27057a36f7e711e2841d00163e122bbb',
         'secret' => '30daf3af06d782d227f37f8a193638b2',
-        ];
+    ];
 
 
-    public function __construct($config=[]) {
-        if(is_array($config)) {
-            $this->weixinAccount   =   array_merge($this->config,$config);
+    public function __construct($config = [])
+    {
+        if (!empty($config['secret'])) {
+            $this->weixinAccount[1] = array_merge($this->config, $config);
 
+        } elseif (is_array($config[1])) {
+            $this->weixinAccount = $config;
+        } else {
+            $this->weixinAccount = [];
         }
     }
 
@@ -31,10 +36,10 @@ class WeixinApi
         trigger_error('Clone is not allow!', E_USER_ERROR);
     }
 
-    public static function getInstance()
+    public static function getInstance($config = [])
     {
         if (!(self::$_instance instanceof self)) {
-            self::$_instance = new self;
+            self::$_instance = new self($config);
         }
         return self::$_instance;
     }
